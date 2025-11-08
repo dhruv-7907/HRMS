@@ -1,0 +1,13 @@
+﻿using Application.ModelDto.Responce;
+using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Application.Features.Designations.Commands
+{
+    public record CreateDesignationsCommand(DesignationsDto Designation) : IRequest<int>;
+
+}
