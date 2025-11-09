@@ -1,4 +1,5 @@
 ﻿using Application.Features.Designations.Commands;
+using Application.Features.Designations.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -38,6 +39,13 @@ namespace WebApi.Controllers
             var result = await _mediator.Send(command, cancellationToken);
             return Ok(result);
         }
+
+        //[HttpPost("/designations")]
+        //public async Task<IActionResult> GetAll([FromBody] GetAllDesignationsQueries command, CancellationToken cancellationToken)
+        //{ 
+
+
+        //}
 
     }
 }

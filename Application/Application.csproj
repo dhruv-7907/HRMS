@@ -18,11 +18,4 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Department\Commands\" />
-    <Folder Include="Features\Department\Handler\" />
-    <Folder Include="Features\Department\Queries\" />
-    <Folder Include="Features\Designations\Queries\" />
-  </ItemGroup>
-
 </Project>

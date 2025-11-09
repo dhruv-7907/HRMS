@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ModelDto\**" />
+    <Content Remove="ModelDto\**" />
+    <EmbeddedResource Remove="ModelDto\**" />
+    <None Remove="ModelDto\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.20" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">
       <PrivateAssets>all</PrivateAssets>
@@ -23,10 +30,6 @@
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     <ProjectReference Include="..\Persistance\Persistance.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ModelDto\Responce\" />
   </ItemGroup>
 
 </Project>
