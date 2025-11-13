@@ -1,4 +1,5 @@
 ﻿using Application.ModelDto.Responce;
+using Domain.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,7 @@ namespace Application.Interfaces
         Task<int> CreateDesignations(DesignationsDto dto);
         Task<int> UpdateDesignations(DesignationsDto dto);
         Task<int> DeleteDesignations(int Id);
+        Task<DesignationsDto> GetDesignationsById(int Id);
+        Task<ApiResponse<PagedResponse<DepartmentDto>>> GetAllDesignations(PaginationParams pagination);
     }
 }

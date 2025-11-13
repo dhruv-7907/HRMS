@@ -3,6 +3,7 @@ using Application.Features.Designations.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace WebApi.Controllers
 {
@@ -40,12 +41,21 @@ namespace WebApi.Controllers
             return Ok(result);
         }
 
-        //[HttpPost("/designations")]
-        //public async Task<IActionResult> GetAll([FromBody] GetAllDesignationsQueries command, CancellationToken cancellationToken)
-        //{ 
+        [HttpPost("/designations")]
+        public async Task<IActionResult> GetAll([FromBody] GetAllDesignationsQueries command, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(command, cancellationToken);
+            return Ok(result);
+        }
 
+        [HttpGet("/designation")]
+        public async Task<IActionResult> GetById (int Id, CancellationToken cancellationToken)
+        {
+            var command = new GetByIdDesignationsQueries(Id);
+            var result = await _mediator.Send(command, cancellationToken);
+            return Ok(result);
+        }
 
-        //}
 
     }
 }

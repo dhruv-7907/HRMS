@@ -1,6 +1,8 @@
 ﻿using Application.Interfaces;
 using Application.ModelDto.Responce;
+using Domain.Common;
 using Domain.Entities;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -45,6 +47,56 @@ namespace Infrastructure.Repository
                 _context.Designations.Remove(designation);
                 await _context.SaveChangesAsync();
                 return Id;
+        }
+
+        public async Task<ApiResponse<PagedResponse<DepartmentDto>>> GetAllDesignations(PaginationParams pagination)
+        {
+            //var query = _context.Designations.AsQueryable();
+            IQueryable<Designations> query = _context.Designations.AsNoTracking();
+
+            if (!string.IsNullOrEmpty(pagination.Name))
+            {
+                query = query.Where(d => d.Name.Contains(pagination.Name));
+            }
+
+            var totalRecords = await query.CountAsync();
+
+            var items = await query.OrderBy(d => d.Id).Skip((pagination.PageNumber - 1) * pagination.PageSize).Take(pagination.PageSize).Select(d => new DepartmentDto
+            {
+                Id = d.Id,
+                Name = d.Name
+            }).ToListAsync();
+
+            var pagedResponse = new PagedResponse<DepartmentDto>(
+                      items,
+                     pagination.PageNumber,
+                     pagination.PageSize,
+                    totalRecords
+               );
+            return new ApiResponse<PagedResponse<DepartmentDto>>(pagedResponse);
+        }
+
+        public async Task<DesignationsDto> GetDesignationsById(int Id)
+        {
+            var item = await _context.Designations
+                                     .AsNoTracking()
+                                     .Where(d => d.Id == Id)
+                                     .Select(d => new DesignationsDto { Id = d.Id, Name = d.Name })
+                                     .FirstOrDefaultAsync();
+            return item;
+
+        //    var entity = await _context.Designations
+        //.AsNoTracking()
+        //.FirstOrDefaultAsync(d => d.Id == id);
+
+        //    if (entity == null)
+        //        return null;
+
+        //    return new DepartmentDto
+        //    {
+        //        Id = entity.Id,
+        //        Name = entity.Name
+        //    };
         }
 
         public async Task<int> UpdateDesignations(DesignationsDto dto)
