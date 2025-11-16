@@ -15,6 +15,7 @@ namespace Infrastructure.Repository
         {
             _context = context;
         }
+
         public async Task<int> Create(DepartmentDtoRequest department)
         {
             var entity = new Deparments
@@ -64,7 +65,7 @@ namespace Infrastructure.Repository
             return new ApiResponse<PagedResponse<DepartmentDtoResponce>>(pagedResponse);
         }
 
-        public  async Task<DepartmentDtoResponce> GetById(int Id)
+        public async Task<DepartmentDtoResponce> GetById(int Id)
         {
             var item = await _context.Deparments
                                    .AsNoTracking()

@@ -1,4 +1,5 @@
-﻿using Application.ModelDto.Responce;
+﻿using Application.ModelDto.Request;
+using Application.ModelDto.Responce;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,6 +15,7 @@ namespace Application.Interfaces
         DbSet<Designations> Designations { get; set; }
         DbSet<Deparments> Deparments { get; set; }
         DbSet<Users> Users { get; set; }
+        DbSet<Employees> Employees { get; set; }
         Task<int> SaveChangesAsync();
     }
 }
