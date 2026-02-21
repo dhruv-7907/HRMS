@@ -11,5 +11,6 @@ namespace Application.Interfaces
      Task<int>Create(DepartmentDtoRequest department);
      Task<int>Update(DepartmentDtoRequest department);
      Task<int>Delete(int Id);
+     Task<IEnumerable<DepartmentDtoResponce>> GetDepartments();
     }
 }

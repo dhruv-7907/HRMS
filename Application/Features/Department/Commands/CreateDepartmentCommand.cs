@@ -8,6 +8,5 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Department.Commands
 {
-
-    public record CreateDepartmentCommand(DepartmentDto Department) : IRequest<int>;
+    public sealed record CreateDepartmentCommand(DepartmentDto Department) : IRequest<int>;
 }

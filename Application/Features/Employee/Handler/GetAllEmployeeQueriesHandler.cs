@@ -19,7 +19,7 @@ namespace Application.Features.Employee.Handler
 
         public async Task<ApiResponse<PagedResponse<EmployeeDto>>> Handle(GetAllEmployeeQueries request, CancellationToken cancellationToken)
         {
-            var result = await _EmployeeRepository.GetAll(request.PaginationParams);
+            var result = await _EmployeeRepository.GetAll(request.paginationParams);
             return result;
         }
     }

@@ -2,13 +2,15 @@
 using Application.Features.Department.Queries;
 using Application.Features.Employee.Commands;
 using Application.Features.Employee.Queries;
+using Application.ModelDto.Request;
+using Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("employee")]
     [ApiController]
     public class EmployeeController : ControllerBase
     {
@@ -19,20 +21,21 @@ namespace WebApi.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("create")]
-        public async Task<IActionResult> Create([FromBody] CreateEmployeeCommand command, CancellationToken cancellationToken)
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] EmployeeDto employeeDto, CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(command, cancellationToken);
+            var result = await _mediator.Send(new CreateEmployeeCommand(employeeDto), cancellationToken);
             return Ok(result);
+            
         }
-        [HttpPut("update")]
-        public async Task<IActionResult> Update([FromBody] UpdateEmployeeCommand command, CancellationToken cancellationToken)
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] EmployeeDto employeeDto, CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(command, cancellationToken);
+            var result = await _mediator.Send(new UpdateEmployeeCommand(employeeDto) , cancellationToken);
             return Ok(result);
         }
 
-        [HttpDelete("delete/{Id}")]
+        [HttpDelete("{Id}")]
         public async Task<IActionResult> Delete(int Id, CancellationToken cancellationToken)
         {
             var command = new DeleteEmployeeCommand(Id);
@@ -41,13 +44,14 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("/employees")]
-        public async Task<IActionResult> GetAll([FromBody] GetAllEmployeeQueries command, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll([FromBody] PaginationParams paginationParams, CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(command, cancellationToken);
+            var result = await _mediator.Send(new GetAllEmployeeQueries(paginationParams), cancellationToken);
             return Ok(result);
+            
         }
 
-        [HttpGet("/employee")]
+        [HttpGet]
         public async Task<IActionResult> GetById(int Id, CancellationToken cancellationToken)
         {
             var command = new GetByIdEmployeeQueries(Id);

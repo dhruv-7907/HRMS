@@ -9,6 +9,18 @@ using WebApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+// Add CORS services
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "AllowOrigin",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -18,7 +30,7 @@ builder.Services.Configure<MailSettings>(
     builder.Configuration.GetSection("MailSettings"));
 // Register Clean Architecture layers
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure();
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddPersistance(builder.Configuration);
 
 // ✅ Add JWT Authentication
@@ -52,7 +64,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("AllowOrigin");
 app.UseAuthentication();  // ✅ must come before UseAuthorization
 app.UseAuthorization();
 

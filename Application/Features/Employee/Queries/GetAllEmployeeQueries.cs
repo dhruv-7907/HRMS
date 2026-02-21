@@ -5,6 +5,6 @@ using MediatR;
 
 namespace Application.Features.Employee.Queries
 {
-    public record GetAllEmployeeQueries(PaginationParams PaginationParams):IRequest<ApiResponse<PagedResponse<EmployeeDto>>>;
+    public record GetAllEmployeeQueries(PaginationParams paginationParams):IRequest<ApiResponse<PagedResponse<EmployeeDto>>>;
    
 }

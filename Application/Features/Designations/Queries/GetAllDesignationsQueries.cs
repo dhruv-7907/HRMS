@@ -9,5 +9,5 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Designations.Queries
 {
-   public record GetAllDesignationsQueries(PaginationParams PaginationParams):IRequest<ApiResponse<PagedResponse<DepartmentDto>>>;
+   public record GetAllDesignationsQueries(PaginationParams PaginationParams):IRequest<ApiResponse<PagedResponse<DesignationsDto>>>;
 }

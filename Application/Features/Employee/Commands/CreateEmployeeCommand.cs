@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Employee.Commands
 {
-    public record CreateEmployeeCommand(EmployeeDto EmployeeDto):IRequest<int>;
+    public record CreateEmployeeCommand(EmployeeDto employeeDto):IRequest<int>;
 }

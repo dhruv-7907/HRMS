@@ -75,6 +75,12 @@ namespace Infrastructure.Repository
             return item;
         }
 
+        public async Task<IEnumerable<DepartmentDtoResponce>> GetDepartments()
+        {
+            var item = await _context.Deparments.AsNoTracking().Select(d => new DepartmentDtoResponce{ Id = d.Id, Name = d.Name }).ToListAsync();
+            return item;
+        }
+
         public async Task<int> Update(DepartmentDtoRequest department)
         {
             var deparments = await _context.Deparments.FindAsync(department.Id);

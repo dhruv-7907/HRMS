@@ -16,7 +16,7 @@ namespace Application.Features.Employee.Handler
 
         public async Task<int> Handle(CreateEmployeeCommand request,CancellationToken cancellationToken)
         {
-            var result = await _employee.Create(request.EmployeeDto);
+            var result = await _employee.Create(request.employeeDto);
             return result;
         }
     }

@@ -22,7 +22,7 @@ namespace Application.Features.Employee.Handler
         public async Task<int> Handle(UpdateEmployeeCommand request, CancellationToken cancellationToken)
         {
             // Pass DTO to repository for data saving
-            var result = await _EmployeeRepository.Update(request.EmployeeDto);
+            var result = await _EmployeeRepository.Update(request.employeeDto);
             return result;
         }
     }

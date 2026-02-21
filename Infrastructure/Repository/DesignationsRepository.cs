@@ -49,7 +49,7 @@ namespace Infrastructure.Repository
                 return Id;
         }
 
-        public async Task<ApiResponse<PagedResponse<DepartmentDto>>> GetAllDesignations(PaginationParams pagination)
+        public async Task<ApiResponse<PagedResponse<DesignationsDto>>> GetAllDesignations(PaginationParams pagination)
         {
             //var query = _context.Designations.AsQueryable();
             IQueryable<Designations> query = _context.Designations.AsNoTracking();
@@ -61,19 +61,20 @@ namespace Infrastructure.Repository
 
             var totalRecords = await query.CountAsync();
 
-            var items = await query.OrderBy(d => d.Id).Skip((pagination.PageNumber - 1) * pagination.PageSize).Take(pagination.PageSize).Select(d => new DepartmentDto
+            var items = await query.OrderBy(d => d.Id).Skip((pagination.PageNumber - 1) * pagination.PageSize).Take(pagination.PageSize).Select(d => new DesignationsDto
             {
                 Id = d.Id,
-                Name = d.Name
+                Name = d.Name,
+                DepartmentId = d.DepartmentId
             }).ToListAsync();
 
-            var pagedResponse = new PagedResponse<DepartmentDto>(
+            var pagedResponse = new PagedResponse<DesignationsDto>(
                       items,
                      pagination.PageNumber,
                      pagination.PageSize,
                     totalRecords
                );
-            return new ApiResponse<PagedResponse<DepartmentDto>>(pagedResponse);
+            return new ApiResponse<PagedResponse<DesignationsDto>>(pagedResponse);
         }
 
         public async Task<DesignationsDto> GetDesignationsById(int Id)
@@ -81,7 +82,7 @@ namespace Infrastructure.Repository
             var item = await _context.Designations
                                      .AsNoTracking()
                                      .Where(d => d.Id == Id)
-                                     .Select(d => new DesignationsDto { Id = d.Id, Name = d.Name })
+                                     .Select(d => new DesignationsDto { Id = d.Id, Name = d.Name ,DepartmentId =d.DepartmentId })
                                      .FirstOrDefaultAsync();
             return item;
 

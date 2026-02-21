@@ -21,4 +21,21 @@ namespace Application.Features.Department.Handler
             return result;
         }
     }
+
+    //for dropDown
+    public class GetAllDepartmentForDropdownQueriesHandler : IRequestHandler<GetAllDepartmentForDropdownQueries, IEnumerable<DepartmentDto>>
+    {
+        private readonly IDepartment _department;
+
+        public GetAllDepartmentForDropdownQueriesHandler(IDepartment department)
+        {
+            _department = department;
+        }
+
+        public async Task<IEnumerable<DepartmentDto>> Handle(GetAllDepartmentForDropdownQueries request, CancellationToken cancellationToken)
+        {
+            var result = await _department.GetDepartments();
+            return result;
+        }
+    }
 }

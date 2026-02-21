@@ -22,7 +22,7 @@ namespace Application.Features.Designations.Handler
         public async Task<int> Handle(CreateDesignationsCommand request, CancellationToken cancellationToken)
         {
             // Pass DTO to repository for data saving
-            var result = await _designationsRepository.CreateDesignations(request.Designation);
+            var result = await _designationsRepository.CreateDesignations(request.designation);
             return result;
         }
     }

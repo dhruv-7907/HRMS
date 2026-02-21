@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Application.Features.Designations.Handler
 {
-    public class GetAllDesignationsQueriesHandler : IRequestHandler<GetAllDesignationsQueries, ApiResponse<PagedResponse<DepartmentDto>>>
+    public class GetAllDesignationsQueriesHandler : IRequestHandler<GetAllDesignationsQueries, ApiResponse<PagedResponse<DesignationsDto>>>
     {
         private readonly IDesignations _designationsRepository;
 
@@ -15,7 +15,7 @@ namespace Application.Features.Designations.Handler
             _designationsRepository = designationsRepository;
         }
 
-        public async Task<ApiResponse<PagedResponse<DepartmentDto>>> Handle(GetAllDesignationsQueries request, CancellationToken cancellationToken)
+        public async Task<ApiResponse<PagedResponse<DesignationsDto>>> Handle(GetAllDesignationsQueries request, CancellationToken cancellationToken)
         {
             var result = await _designationsRepository.GetAllDesignations(request.PaginationParams);
             return result;

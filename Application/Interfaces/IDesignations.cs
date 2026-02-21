@@ -14,6 +14,6 @@ namespace Application.Interfaces
         Task<int> UpdateDesignations(DesignationsDto dto);
         Task<int> DeleteDesignations(int Id);
         Task<DesignationsDto> GetDesignationsById(int Id);
-        Task<ApiResponse<PagedResponse<DepartmentDto>>> GetAllDesignations(PaginationParams pagination);
+        Task<ApiResponse<PagedResponse<DesignationsDto>>> GetAllDesignations(PaginationParams pagination);
     }
 }

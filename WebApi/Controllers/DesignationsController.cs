@@ -1,5 +1,7 @@
 ﻿using Application.Features.Designations.Commands;
 using Application.Features.Designations.Queries;
+using Application.ModelDto.Responce;
+using Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,33 +9,28 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("designation")]
     [ApiController]
-    public class DesignationsController : ControllerBase
+    public class DesignationsController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IMediator _mediator = mediator;
 
-        public DesignationsController(IMediator mediator)
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] DesignationsDto designation, CancellationToken cancellationToken)
         {
-            _mediator = mediator;
+            var result = await _mediator.Send(new CreateDesignationsCommand(designation), cancellationToken);
+            return Ok(result);
+           
         }
 
-        [HttpPost("create")]
-        public async Task<IActionResult> Create([FromBody] CreateDesignationsCommand command, CancellationToken cancellationToken)
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] DesignationsDto designation, CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(command, cancellationToken);
+            var result = await _mediator.Send(new UpdateDesignationsCommand(designation), cancellationToken);
             return Ok(result);
         }
 
-
-        [HttpPut("update")]
-        public async Task<IActionResult> Update([FromBody] UpdateDesignationsCommand command, CancellationToken cancellationToken)
-        {
-            var result = await _mediator.Send(command, cancellationToken);
-            return Ok(result);
-        }
-
-        [HttpDelete("delete/{Id}")]
+        [HttpDelete("{Id}")]
         public async Task<IActionResult> Delete(int Id, CancellationToken cancellationToken)
         {
             var command = new DeleteDesignationsCommand(Id);
@@ -42,16 +39,16 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("/designations")]
-        public async Task<IActionResult> GetAll([FromBody] GetAllDesignationsQueries command, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll([FromBody] PaginationParams PaginationParams, CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(command, cancellationToken);
+            var result = await _mediator.Send(new GetAllDesignationsQueries(PaginationParams), cancellationToken);
             return Ok(result);
         }
 
-        [HttpGet("/designation")]
-        public async Task<IActionResult> GetById (int Id, CancellationToken cancellationToken)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById (int id, CancellationToken cancellationToken)
         {
-            var command = new GetByIdDesignationsQueries(Id);
+            var command = new GetByIdDesignationsQueries(id);
             var result = await _mediator.Send(command, cancellationToken);
             return Ok(result);
         }

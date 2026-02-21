@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Designations.Commands
 {
-    public record CreateDesignationsCommand(DesignationsDto Designation) : IRequest<int>;
+    public record CreateDesignationsCommand(DesignationsDto designation) : IRequest<int>;
 
 }

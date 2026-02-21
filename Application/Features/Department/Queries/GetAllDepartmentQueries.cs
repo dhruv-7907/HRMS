@@ -10,4 +10,5 @@ using System.Threading.Tasks;
 namespace Application.Features.Department.Queries
 {
     public record GetAllDepartmentQueries(PaginationParams PaginationParams) : IRequest<ApiResponse<PagedResponse<DepartmentDto>>>;
+    public record GetAllDepartmentForDropdownQueries() : IRequest<IEnumerable<DepartmentDto>>;
 }
