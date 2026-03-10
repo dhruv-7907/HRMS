@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Infrastructure.HelperServices;
 using Infrastructure.Repository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,8 @@ namespace Infrastructure
             services.AddScoped<IDepartment, DepartmentRepository>();
             services.AddScoped<IEmployee, EmployeeRepository>();
             services.AddScoped<IFileService, FileServiceRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPasswordHasher, PasswordHasherService>();
             services.Configure<FileStorageSettings>(
                  configuration.GetSection("FileStorageSettings"));
             return services;

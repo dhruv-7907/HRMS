@@ -13,9 +13,10 @@ namespace Domain.Entities
       public int Id { get; set; }
       public required string Name { get; set; }
       public required string Password { get; set; }
-
-      [ForeignKey("RoleId")]
-      public virtual Roles Roles { get; set; }
+      public required string Email { get; set; }
+        public int RoleId { get; set; }
+        [ForeignKey(nameof(RoleId))]
+        public virtual Roles Roles { get; set; }
 
     }
 }

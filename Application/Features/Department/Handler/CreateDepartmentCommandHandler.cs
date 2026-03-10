@@ -17,6 +17,8 @@ namespace Application.Features.Department.Handler
 
         public async Task<int> Handle(CreateDepartmentCommand request,CancellationToken cancellationToken)
         {
+            if (request.Department.Name != "Dhruv")
+                throw new ArgumentException("Dhruv Is Require");
           var result =  await _department.Create(request.Department);
             return result;
         }

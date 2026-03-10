@@ -4,70 +4,112 @@ using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Persistance;
+using Serilog;
+//using Serilog.Events;
 using System.Text;
 using WebApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
+#region 🔥 Configure Serilog (Production Ready)
 
-// Add CORS services
-builder.Services.AddCors(options =>
+Log.Logger = new LoggerConfiguration()
+     .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
+#endregion
+
+try
 {
-    options.AddPolicy(name: "AllowOrigin",
-        builder =>
-        {
-            builder.AllowAnyOrigin()
-                   .AllowAnyHeader()
-                   .AllowAnyMethod();
-        });
-});
-// Add services to the container.
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<GenerateJwtToken>();
-builder.Services.Configure<MailSettings>(
-    builder.Configuration.GetSection("MailSettings"));
-// Register Clean Architecture layers
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddPersistance(builder.Configuration);
+    Log.Information("Starting Web API");
 
-// ✅ Add JWT Authentication
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+    #region CORS
+
+    builder.Services.AddCors(options =>
     {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
-            ),
-            ValidateIssuer = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidateAudience = true,
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero // ✅ No extra 5 min delay
-        };
+        options.AddPolicy(name: "AllowOrigin",
+            policy =>
+            {
+                policy.AllowAnyOrigin()
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+            });
     });
 
-builder.Services.AddAuthorization();
+    #endregion
 
-var app = builder.Build();
+    builder.Services.AddControllers();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    builder.Services.AddScoped<GenerateJwtToken>();
+
+    builder.Services.Configure<MailSettings>(
+        builder.Configuration.GetSection("MailSettings"));
+
+    // Clean Architecture Layers
+    builder.Services.AddApplication();
+    builder.Services.AddInfrastructure(builder.Configuration);
+    builder.Services.AddPersistance(builder.Configuration);
+
+    #region JWT Authentication
+
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
+                ),
+                ValidateIssuer = true,
+                ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                ValidateAudience = true,
+                ValidAudience = builder.Configuration["Jwt:Audience"],
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+        });
+
+    builder.Services.AddAuthorization();
+
+    #endregion
+
+    var app = builder.Build();
+
+    #region Middleware Pipeline
+
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+    app.UseSerilogRequestLogging(); // 🔥 Logs all HTTP requests
+
+    app.UseHttpsRedirection();
+    app.UseCors("AllowOrigin");
+
+    app.UseMiddleware<GlobalExceptionMiddleware>();
+
+    app.UseAuthentication();
+    app.UseAuthorization();
+
+    app.MapControllers();
+
+    #endregion
+
+    app.Run();
 }
-
-app.UseHttpsRedirection();
-app.UseCors("AllowOrigin");
-app.UseAuthentication();  // ✅ must come before UseAuthorization
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Application failed to start");
+}
+finally
+{
+    Log.CloseAndFlush();
+}
