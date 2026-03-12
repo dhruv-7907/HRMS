@@ -16,7 +16,7 @@ namespace WebApi.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("register")]
+        [HttpPost("dhruv")]
         public async Task<IActionResult> Register(
             RegisterUserCommand command)
         {
