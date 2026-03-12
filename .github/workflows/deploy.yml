@@ -1,0 +1,39 @@
+name: Deploy ASP.NET Core API to IIS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  build-and-deploy:
+    runs-on: self-hosted
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore Packages
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release
+
+      - name: Publish
+        run: dotnet publish -c Release -o C:\deploy\HrmsApi
+
+      - name: Stop IIS
+        run: iisreset /stop
+
+      - name: Deploy Files
+        run: xcopy C:\deploy\HrmsApi C:\inetpub\wwwroot\api\HrmsApi /E /Y
+
+      - name: Start IIS
+        run: iisreset /start

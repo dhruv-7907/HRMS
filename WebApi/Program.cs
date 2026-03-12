@@ -83,11 +83,11 @@ try
 
     #region Middleware Pipeline
 
-    if (app.Environment.IsDevelopment())
-    {
+    //if (app.Environment.IsDevelopment())
+    //{
         app.UseSwagger();
         app.UseSwaggerUI();
-    }
+    //}
 
     app.UseSerilogRequestLogging(); // 🔥 Logs all HTTP requests
 
