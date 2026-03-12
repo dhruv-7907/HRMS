@@ -17,16 +17,17 @@ namespace WebApi.Controllers
         }
 
         //[HttpPost("register")]
-        //public async Task<IActionResult> Register(
-        //    RegisterUserCommand command)
-        //{
-        //    var userId = await _mediator.Send(command);
+        [HttpPost("Login")]
+        public async Task<IActionResult> Register(
+            RegisterUserCommand command)
+        {
+            var userId = await _mediator.Send(command);
 
-        //    return Ok(new
-        //    {
-        //        Message = "User registered successfully",
-        //        UserId = userId
-        //    });
-        //}
+            return Ok(new
+            {
+                Message = "User registered successfully",
+                UserId = userId
+            });
+        }
     }
 }
