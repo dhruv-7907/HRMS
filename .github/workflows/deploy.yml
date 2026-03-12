@@ -27,13 +27,13 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: Publish
-        run: dotnet publish -c Release -o C:\deploy\HrmsApi
+        run: dotnet publish -c Release -o C:\Publish\HrmsApi
 
       - name: Stop IIS
         run: iisreset /stop
 
       - name: Deploy Files
-        run: xcopy C:\deploy\HrmsApi C:\inetpub\wwwroot\api\HrmsApi /E /Y
+        run: xcopy C:\Publish\HrmsApi C:\inetpub\wwwroot\api\HrmsApi /E /Y
 
       - name: Start IIS
         run: iisreset /start
