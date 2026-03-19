@@ -14,7 +14,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Restore
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore Packages
         run: dotnet restore
 
       - name: Build
@@ -23,14 +28,10 @@ jobs:
       - name: Publish
         run: dotnet publish -c Release -o C:\Publish\HrmsApi
 
-      - name: Stop App Pool
-        run: powershell -Command "Import-Module WebAdministration; Stop-WebAppPool -Name 'HrmsApi'"
-
-      - name: Wait for release
-        run: timeout /t 5
-
       - name: Deploy Files
-        run: robocopy C:\Publish\HrmsApi C:\inetpub\wwwroot\api\HrmsApi /MIR
+        run: xcopy C:\Publish\HrmsApi C:\inetpub\wwwroot\api\HrmsApi /E /Y
 
-      - name: Start App Pool
-        run: powershell -Command "Import-Module WebAdministration; Start-WebAppPool -Name 'HrmsApi'"
+      - name: Restart App Pool
+        run: |
+          %windir%\system32\inetsrv\appcmd stop apppool /apppool.name:"HrmsApiApp"
+          %windir%\system32\inetsrv\appcmd start apppool /apppool.name:"HrmsApiApp"
