@@ -6,7 +6,6 @@ on:
       - main
 
 jobs:
-
   build-and-deploy:
     runs-on: self-hosted
 
@@ -14,11 +13,6 @@ jobs:
 
       - name: Checkout Code
         uses: actions/checkout@v4
-
-      # - name: Setup .NET
-      #   uses: actions/setup-dotnet@v4
-      #   with:
-      #     dotnet-version: 8.0.x
 
       - name: Restore Packages
         run: dotnet restore
@@ -29,11 +23,15 @@ jobs:
       - name: Publish
         run: dotnet publish -c Release -o C:\deploy\HrmsApi
 
-      - name: Stop IIS
-        run: iisreset /stop
+      - name: Stop App Pool
+        run: |
+          Import-Module WebAdministration
+          Stop-WebAppPool -Name "HrmsApiAppPool"
 
       - name: Deploy Files
-        run: xcopy C:\deploy\HrmsApi C:\inetpub\wwwroot\api\HrmsApi /E /Y
+        run: robocopy C:\deploy\HrmsApi C:\inetpub\wwwroot\api\HrmsApi /MIR
 
-      - name: Start IIS
-        run: iisreset /start
+      - name: Start App Pool
+        run: |
+          Import-Module WebAdministration
+          Start-WebAppPool -Name "HrmsApiAppPool"
