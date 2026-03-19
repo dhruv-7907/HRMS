@@ -29,9 +29,10 @@ jobs:
         run: dotnet publish -c Release -o C:\Publish\HrmsApi
 
       - name: Deploy Files
-        run: xcopy C:\Publish\HrmsApi C:\inetpub\wwwroot\api\HrmsApi /E /Y
+        run: robocopy C:\Publish\HrmsApi C:\inetpub\wwwroot\api\HrmsApi /MIR
 
       - name: Restart App Pool
+        shell: powershell
         run: |
-          %windir%\system32\inetsrv\appcmd stop apppool /apppool.name:"HrmsApi"
-          %windir%\system32\inetsrv\appcmd start apppool /apppool.name:"HrmsApi"
+          & "$env:windir\system32\inetsrv\appcmd.exe" stop apppool /apppool.name:"HrmsApi"
+          & "$env:windir\system32\inetsrv\appcmd.exe" start apppool /apppool.name:"HrmsApi"
