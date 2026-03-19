@@ -21,7 +21,7 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: Publish
-        run: dotnet publish -c Release -o C:\deploy\HrmsApi
+        run: dotnet publish -c Release -o C:\Publish\HrmsApi
 
       - name: Stop App Pool
         run: powershell -Command "Import-Module WebAdministration; Stop-WebAppPool -Name 'HrmsApi'"
@@ -30,7 +30,7 @@ jobs:
         run: timeout /t 5
 
       - name: Deploy Files
-        run: robocopy C:\deploy\HrmsApi C:\inetpub\wwwroot\api\HrmsApi /MIR
+        run: robocopy C:\Publish\HrmsApi C:\inetpub\wwwroot\api\HrmsApi /MIR
 
       - name: Start App Pool
         run: powershell -Command "Import-Module WebAdministration; Start-WebAppPool -Name 'HrmsApi'"
