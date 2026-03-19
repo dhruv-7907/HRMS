@@ -33,5 +33,5 @@ jobs:
 
       - name: Restart App Pool
         run: |
-          %windir%\system32\inetsrv\appcmd stop apppool /apppool.name:"HrmsApiApp"
-          %windir%\system32\inetsrv\appcmd start apppool /apppool.name:"HrmsApiApp"
+          %windir%\system32\inetsrv\appcmd stop apppool /apppool.name:"HrmsApi"
+          %windir%\system32\inetsrv\appcmd start apppool /apppool.name:"HrmsApi"
