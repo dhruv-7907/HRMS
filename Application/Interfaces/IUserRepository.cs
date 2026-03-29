@@ -15,6 +15,7 @@ namespace Application.Interfaces
         Task RefreshTokenAddAsync(RefreshToken refreshToken);
         Task<RefreshToken?> GetByTokenAsync(string token);
         Task RefreshTokenUpdateAsync(RefreshToken token);
+        //add
         Task<Users> GetByUser(int Id);
     }
 }
