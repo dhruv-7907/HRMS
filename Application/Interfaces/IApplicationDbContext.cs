@@ -16,6 +16,7 @@ namespace Application.Interfaces
         DbSet<Deparments> Deparments { get; set; }
         DbSet<Users> Users { get; set; }
         DbSet<Employees> Employees { get; set; }
+        DbSet<RefreshToken> RefreshToken { get; set; }
         Task<int> SaveChangesAsync();
     }
 }

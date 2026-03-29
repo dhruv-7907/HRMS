@@ -11,5 +11,10 @@ namespace Application.Interfaces
     {
         Task<Users?> GetByEmailAsync(string email);
         Task AddAsync(Users user);
+        Task UpdateAsync(Users user);
+        Task RefreshTokenAddAsync(RefreshToken refreshToken);
+        Task<RefreshToken?> GetByTokenAsync(string token);
+        Task RefreshTokenUpdateAsync(RefreshToken token);
+        Task<Users> GetByUser(int Id);
     }
 }

@@ -16,6 +16,8 @@ namespace Infrastructure
             services.AddScoped<IFileService, FileServiceRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPasswordHasher, PasswordHasherService>();
+            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+            services.AddScoped<IRefreshToken, RefreshTokenService>();
             services.Configure<FileStorageSettings>(
                  configuration.GetSection("FileStorageSettings"));
             return services;

@@ -29,5 +29,33 @@ namespace Infrastructure.Repository
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
         }
+        public async Task UpdateAsync(Users user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RefreshTokenAddAsync(RefreshToken refreshToken)
+        {
+            await _context.RefreshToken.AddAsync(refreshToken);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<RefreshToken?> GetByTokenAsync(string token)
+        {
+            return await _context.RefreshToken
+       .FirstOrDefaultAsync(x => x.Token == token);
+        }
+
+        public async Task RefreshTokenUpdateAsync(RefreshToken token)
+        {
+            _context.RefreshToken.Update(token);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<Users> GetByUser(int Id)
+        {
+            return await _context.Users.FirstOrDefaultAsync(x => x.Id == Id);
+        }
     }
 }

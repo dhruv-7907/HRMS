@@ -16,7 +16,7 @@ namespace WebApi.Controllers
             _mediator = mediator;
         }
         //
-        [HttpPost("dh")]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register(
             RegisterUserCommand command)
         {
@@ -27,6 +27,21 @@ namespace WebApi.Controllers
                 Message = "User registered successfully",
                 UserId = userId
             });
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginUserCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            return Ok(result);
+        }
+
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken(RefreshTokenCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
     }
 }

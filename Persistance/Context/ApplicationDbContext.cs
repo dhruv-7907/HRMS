@@ -29,6 +29,7 @@ namespace Persistance.Context
         public DbSet<SalarySlips> SalarySlips { get; set; }
         public DbSet<SalaryStructure> SalaryStructures { get; set; }
         public DbSet<Deparments> Deparments { get; set; }
+        public DbSet<RefreshToken> RefreshToken { get; set; }
         public async Task<int> SaveChangesAsync()
         {
             return await base.SaveChangesAsync();
