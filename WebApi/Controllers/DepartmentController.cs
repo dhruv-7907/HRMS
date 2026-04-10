@@ -11,7 +11,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace WebApi.Controllers
 {
-    [Route("/departments")]
+    [Route("/departmentsss")]
     [ApiController]
     public class DepartmentController : ControllerBase
     {
